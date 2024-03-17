@@ -3,9 +3,11 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import axios from '../axios';
 import { useAuth } from '../contexts/AuthContext';
+import Loading from "../pages/common/Loading";
 
 export default function DefaultLayout() {
 	const { user, setUser } = useAuth();
+	const [loading, setLoading] = React.useState(false)
 
 	// check if user is logged in or not from server
 	useEffect(() => {
@@ -31,9 +33,11 @@ export default function DefaultLayout() {
 
 	// logout user
 	const handleLogout = async () => {
+		setLoading(true);
 		try {
 			const resp = await axios.post('/logout');
 			if (resp.status === 200) {
+				setLoading(false);
 				localStorage.removeItem('user');
 				window.location.href = '/';
 			}
@@ -41,20 +45,25 @@ export default function DefaultLayout() {
 			console.log(error);
 		}
 	};
+
+	if (loading) {
+        return <Loading/>
+    }
+
 	return (
 		<>
 			<nav className="bg-white border-gray-200 px-2 sm:px-4 py-2.5 dark:bg-gray-900">
 				<div className="container flex flex-wrap items-center justify-between mx-auto">
-					<a href="https://dcodemania.com/" className="flex items-center">
+					<NavLink to="/profile" className="flex items-center">
 						<img
-							src="https://dcodemania.com/img/logo.svg"
+							src="https://t4.ftcdn.net/jpg/01/68/19/99/360_F_168199905_Vbjdxtr54j3xuwC1ml2GKEvFLybiTREo.webp"
 							className="h-6 mr-3 sm:h-9"
 							alt="DCodeMania Logo"
 						/>
 						<span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
 							DCodeMania
 						</span>
-					</a>
+					</NavLink>
 					<button
 						data-collapse-toggle="navbar-default"
 						type="button"
@@ -100,12 +109,11 @@ export default function DefaultLayout() {
 							</li>
 
 							<li>
-								<a
+								<button
 									onClick={handleLogout}
-									href="#"
 									className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
 									Logout
-								</a>
+								</button>
 							</li>
 						</ul>
 					</div>
