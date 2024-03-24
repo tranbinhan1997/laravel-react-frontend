@@ -24,7 +24,7 @@ export default function Login() {
 			if (resp.status === 200) {
 				setLoading(false);
 				setUser(resp.data.user);
-				return <Navigate to="/profile" />;
+				return <Navigate to="/chat" />;
 			}
 		} catch (error) {
 			if (error.response.status === 401) {

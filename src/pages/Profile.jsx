@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
-export default function Profile() {
+const Profile = () => {
 	const { user } = useAuth();
 	return (
 		<>
@@ -19,3 +19,4 @@ export default function Profile() {
 		</>
 	);
 }
+export default Profile;
